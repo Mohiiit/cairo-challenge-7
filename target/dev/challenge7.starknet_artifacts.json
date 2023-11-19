@@ -1,0 +1,1 @@
+{"version":1,"contracts":[{"id":"ntfannbo77bgg","package_name":"challenge7","contract_name":"Challenge7Real","artifacts":{"sierra":"challenge7_Challenge7Real.contract_class.json","casm":null}},{"id":"vkvg9q51705d6","package_name":"challenge7","contract_name":"Challenge7ERC20","artifacts":{"sierra":"challenge7_Challenge7ERC20.contract_class.json","casm":null}}]}

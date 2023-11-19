@@ -1,7 +1,9 @@
-use starknet::{ContractAddress};
+use starknet::{ContractAddress, get_caller_address, get_execution_info, get_contract_address};
+
+#[starknet::interface]
 trait IChallenge7Real<TContractState> {
-    fn is_complete(self: @TContractState);
-    fn get_vitalik_address(self: @TContractState);
+    fn isComplete(self: @TContractState) -> bool;
+    fn get_vitalik_address(self: @TContractState) -> ContractAddress;
 }
 
 
@@ -10,7 +12,7 @@ mod Challenge7Real {
     use challenge7::challenge7_erc20::IChallenge7ERC20DispatcherTrait;
     use core::traits::Into;
     use starknet::{
-        ContractAddress, get_caller_address, get_contract_address,
+        ContractAddress, get_caller_address, get_execution_info, get_contract_address,
         class_hash_const, ClassHash
     };
     use challenge7::challenge7_erc20::{
@@ -41,7 +43,7 @@ mod Challenge7Real {
         ];
 
         let class_hash:ClassHash = class_hash_const::<
-            '0x05656764d46c8b517e2bca849ccc4112d870f4ba6125fad88276a09931f18f70'
+            '0x01ef7cce71cda9438b452d373be4fb4d4240d57aaa7d8d86c93dadac0db7cab3'
         >();
 
         let (new_contract_address, _) = deploy_syscall(
@@ -54,16 +56,16 @@ mod Challenge7Real {
 
     #[external(v0)]
     impl Challenge7Real of super::IChallenge7Real<ContractState> {
-        fn is_complete(self: @ContractState) {
-            // let vitalik_address = get_contract_address();
-            // let vtoken: ContractAddress = self.vtoken_address.read();
-            // let erc20_dispatcher = IChallenge7ERC20Dispatcher { contract_address: vtoken };
-            // let current_balance = erc20_dispatcher.balance_of(vitalik_address);
-            // assert(current_balance != 0, 'challenge not completed yet');
-            // true
+        fn isComplete(self: @ContractState) -> bool {
+            let vitalik_address = get_contract_address();
+            let vtoken: ContractAddress = self.vtoken_address.read();
+            let erc20_dispatcher = IChallenge7ERC20Dispatcher { contract_address: vtoken };
+            let current_balance = erc20_dispatcher.balance_of(vitalik_address);
+            assert(current_balance != 0, 'challenge not completed yet');
+            true
         }
-        fn get_vitalik_address(self: @ContractState) {
-            // self.vtoken_address.read()
+        fn get_vitalik_address(self: @ContractState) -> ContractAddress {
+            self.vtoken_address.read()
         }
     }
 }
